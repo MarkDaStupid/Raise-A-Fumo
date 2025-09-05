@@ -360,3 +360,32 @@ body.theme-cyan {
   box-shadow: 0 2px 6px rgba(0,0,0,0.3); /* optional shadow */
   cursor: pointer;
 }
+/* Make draggable things behave on touch */
+#fumo, #fumoImg, #ball, #soap {
+  touch-action: none;                 /* stop page scrolling while dragging */
+  -webkit-user-drag: none;            /* Safari/iPad: no ghost image */
+  user-select: none;
+}
+
+/* Keep soap above Fumo while scrubbing */
+#soap { z-index: 9999; position: absolute; }
+
+/* iPad / tablets: friendlier layout */
+@media (max-width: 1024px) {
+  .container { width: 96vw; padding: 12px; }
+
+  /* Center the fumo area; give room for fingers */
+  #fumo {
+    left: 50% !important;
+    transform: translateX(-50%);
+    top: 110px;                       /* adjust if you like */
+  }
+  #fumoImg { max-width: min(65vw, 340px); }
+
+  /* Larger buttons for fingers */
+  button { min-height: 44px; padding: 10px 14px; }
+
+  /* Talk box & quest readable */
+  #talkBox { max-height: 30vh; font-size: 15px; }
+  #quest   { font-size: 15px; padding: 8px 10px; }
+}

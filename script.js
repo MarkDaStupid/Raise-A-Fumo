@@ -856,3 +856,175 @@ setInterval(() => {
 
 // Start first quest
 newQuest();
+/* ============================
+   iPad / Touch support patch
+   Paste this at the BOTTOM of script.js
+============================ */
+(function () {
+  // Utility: get touch/mouse point
+  function pt(e) {
+    if (e.touches && e.touches[0]) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    return { x: e.clientX, y: e.clientY };
+  }
+  function clampRectToViewport(el) {
+    if (!el) return;
+    const maxX = window.innerWidth  - el.offsetWidth;
+    const maxY = window.innerHeight - el.offsetHeight;
+    const x = Math.max(0, Math.min(maxX, parseInt(el.style.left || 0)));
+    const y = Math.max(0, Math.min(maxY, parseInt(el.style.top  || 0)));
+    el.style.left = x + "px";
+    el.style.top  = y + "px";
+  }
+
+  // Fallbacks in case variables weren’t global
+  const FUMO_IMG = (typeof fumoImg !== "undefined" ? fumoImg : document.getElementById("fumoImg"));
+  const FUMO_DIV = (typeof fumoDiv !== "undefined" ? fumoDiv : document.getElementById("fumo"));
+  const SOAP_EL  = document.getElementById("soap");
+  const BALL_EL  = (typeof ball !== "undefined" ? ball : document.getElementById("ball"));
+
+  // Ensure globals exist (your file usually defines these already)
+  if (typeof offsetX === "undefined") window.offsetX = 0;
+  if (typeof offsetY === "undefined") window.offsetY = 0;
+
+  /* -------- Fumo: touch pet + drag -------- */
+  if (FUMO_IMG && FUMO_DIV) {
+    FUMO_IMG.addEventListener("touchstart", (e) => {
+      // Start petting (touch has no mouseenter)
+      if (typeof isSleeping !== "undefined" && typeof isDragging !== "undefined") {
+        if (!isSleeping && !isDragging) {
+          window.isPetting = true;
+          FUMO_IMG.classList.add("happy");
+          if (typeof petHand !== "undefined") petHand.style.display = "block";
+        }
+      }
+      // Prepare possible drag
+      e.preventDefault();
+      const p = pt(e);
+      const rect = FUMO_DIV.getBoundingClientRect();
+      window.offsetX = p.x - rect.left;
+      window.offsetY = p.y - rect.top;
+    }, { passive: false });
+
+    FUMO_IMG.addEventListener("touchmove", (e) => {
+      // If finger moves far enough, treat as dragging
+      if (typeof isDragging === "undefined") return;
+      const p = pt(e);
+      const rect = FUMO_DIV.getBoundingClientRect();
+      const dx = Math.abs(p.x - (rect.left + offsetX));
+      const dy = Math.abs(p.y - (rect.top  + offsetY));
+      if (!isDragging && (dx > 8 || dy > 8)) {
+        window.isDragging = true;
+        FUMO_DIV.classList.add("dragging");
+        if (typeof wanderInterval !== "undefined") clearInterval(wanderInterval);
+        // stop petting when drag starts
+        window.isPetting = false;
+        FUMO_IMG.classList.remove("happy");
+        if (typeof petHand !== "undefined") petHand.style.display = "none";
+      }
+    }, { passive: false });
+
+    document.addEventListener("touchmove", (e) => {
+      if (typeof isDragging === "undefined" || !isDragging) return;
+      e.preventDefault();
+      const p = pt(e);
+      FUMO_DIV.style.left = (p.x - offsetX) + "px";
+      FUMO_DIV.style.top  = (p.y - offsetY) + "px";
+    }, { passive: false });
+
+    document.addEventListener("touchend", () => {
+      if (typeof isDragging !== "undefined" && isDragging) {
+        window.isDragging = false;
+        FUMO_DIV.classList.remove("dragging");
+        clampRectToViewport(FUMO_DIV);
+
+        // resume wander like mouseup
+        if (typeof wanderInterval !== "undefined")
+          window.wanderInterval = setInterval(() => {
+            if (typeof isSleeping !== "undefined" && isSleeping) return;
+            if (typeof isPetting !== "undefined" && isPetting) return;
+            let x = parseInt(FUMO_DIV.style.left) || 300;
+            let y = parseInt(FUMO_DIV.style.top)  || 200;
+            x += (Math.floor(Math.random() * 3) - 1) * 50;
+            y += (Math.floor(Math.random() * 3) - 1) * 50;
+            const maxX = window.innerWidth - FUMO_DIV.offsetWidth;
+            const maxY = window.innerHeight - FUMO_DIV.offsetHeight;
+            x = Math.max(0, Math.min(maxX, x));
+            y = Math.max(0, Math.min(maxY, y));
+            FUMO_DIV.style.left = x + "px";
+            FUMO_DIV.style.top  = y + "px";
+          }, 2000);
+      }
+      // stop petting on finger up
+      window.isPetting = false;
+      FUMO_IMG.classList.remove("happy");
+      if (typeof petHand !== "undefined") petHand.style.display = "none";
+    }, { passive: true });
+
+    window.addEventListener("resize", () => clampRectToViewport(FUMO_DIV));
+  }
+
+  /* -------- Soap: touch drag (no ghost image) -------- */
+  if (SOAP_EL) {
+    SOAP_EL.setAttribute("draggable", "false");
+    let draggingSoap = false, sx = 0, sy = 0;
+
+    SOAP_EL.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      const p = pt(e);
+      const r = SOAP_EL.getBoundingClientRect();
+      sx = p.x - r.left;
+      sy = p.y - r.top;
+      draggingSoap = true;
+    }, { passive: false });
+
+    document.addEventListener("touchmove", (e) => {
+      if (!draggingSoap) return;
+      e.preventDefault();
+      const p = pt(e);
+      SOAP_EL.style.left = (p.x - sx) + "px";
+      SOAP_EL.style.top  = (p.y - sy) + "px";
+      SOAP_EL.style.zIndex = 9999; // stay above fumo
+    }, { passive: false });
+
+    document.addEventListener("touchend", () => { draggingSoap = false; }, { passive: true });
+  }
+
+  /* -------- Ball: touch drag + fling -------- */
+  if (BALL_EL) {
+    BALL_EL.setAttribute("draggable", "false");
+
+    BALL_EL.addEventListener("touchstart", (e) => {
+      if (typeof isDraggingBall === "undefined") return;
+      e.preventDefault();
+      window.isDraggingBall = true;
+      if (typeof ballInterval !== "undefined") clearInterval(ballInterval);
+      const r = BALL_EL.getBoundingClientRect();
+      const p = pt(e);
+      window.dragOffsetX = p.x - r.left;
+      window.dragOffsetY = p.y - r.top;
+      window.lastMouseX = p.x;
+      window.lastMouseY = p.y;
+    }, { passive: false });
+
+    document.addEventListener("touchmove", (e) => {
+      if (typeof isDraggingBall === "undefined" || !isDraggingBall) return;
+      e.preventDefault();
+      const p = pt(e);
+      window.ballX = p.x - dragOffsetX;
+      window.ballY = p.y - dragOffsetY;
+      BALL_EL.style.left = ballX + "px";
+      BALL_EL.style.top  = ballY + "px";
+      window.ballVX = (p.x - lastMouseX) / 2;
+      window.ballVY = (p.y - lastMouseY) / 2;
+      window.lastMouseX = p.x;
+      window.lastMouseY = p.y;
+    }, { passive: false });
+
+    document.addEventListener("touchend", () => {
+      if (typeof isDraggingBall !== "undefined" && isDraggingBall) {
+        window.isDraggingBall = false;
+        if (typeof startBall === "function") startBall(); // resume bouncing
+      }
+    }, { passive: true });
+  }
+})();
