@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Raise Your Fumo</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/x-icon" href="https://cirno.day/fumo.jpg">
+</head>
+<body>
+  <div class="container">
+    <h1>
+      Raise Your Fumo ❄️
+      <img id="Icon" src="https://cirno.day/fumo.jpg">
+      <button id="settingsBtn" class="settings-btn">⚙️</button>
+      <button id="fumosBtn">Fumos</button>
+
+    </h1>
+
+    <!-- Settings dropdown -->
+    <div id="settingsPanel" class="hidden">
+      <button id="resetBtn">Reset Game</button>
+     <label for="themeSelect">Theme:</label>
+<select id="themeSelect">
+  <option value="default">Default</option>
+  <option value="dark">Dark</option>
+  <option value="red">Shrine Red</option>
+  <option value="purple">Magic Purple</option>
+  <option value="cyan">Frosty Cyan</option>
+</select>
+      <label><input type="checkbox" id="idleTalkToggle" checked> Idle Talks</label>
+    </div>
+
+    <div id="fumo">
+      <img id="fumoImg" src="https://img1.picmix.com/output/stamp/normal/6/8/3/2/2012386_9113c.png" alt="Fumo">
+      <img id="petHand" src="https://media1.giphy.com/media/v1.Y2lkPTZjMDliOTUyN3NrZDg5dXVyMTNwdWlraTdhZWZ4OHFoODZ5MW9jdnd0eGR4NzlpNSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/FywOYzrcOVjtY1ORy4/200.gif" alt="Petting hand">
+    </div>
+
+    <div class="stats">
+      <div class="bar">
+        <span>Hunger</span>
+        <div class="fill" id="hungerFill"></div>
+      </div>
+      <div class="bar">
+        <span>Happiness</span>
+        <div class="fill" id="happinessFill"></div>
+      </div>
+      <div class="bar">
+        <span>Energy</span>
+        <div class="fill" id="energyFill"></div>
+      </div>
+      <div class="bar">
+        <span>friendship</span>
+        <div class="fill" id="friendshipFill"></div>
+      </div>
+      <div class="bar">
+        <span>cleanliness</span>
+        <div class="fill" id="cleanlinessFill"></div>
+      </div>
+    </div>
+<img id="soap" src="https://pngimg.com/d/soap_PNG37.png" alt="Soap">
+    <p id="coins">Coins: 0</p>
+    <button id="feedBtn">🍞 Feed</button>
+    <button id="sleepBtn">💤 Sleep</button>
+    <button id="shopToggle">🛒 Shop</button>
+<!-- Games Button -->
+<button id="gamesBtn">🎮 Games</button>
+
+<!-- Games Panel -->
+<div id="gamesPanel" class="hidden panel">
+  <h2>Mini Games</h2>
+  <p>Choose a game to play with your Fumo!</p>
+  <ul>
+    <li><button class="playGame" data-game="ballGame">⚽ Ball Bounce</button></li>
+    <li><button class="playGame" data-game="guessGame">❓ Guess the Number</button></li>
+    <li><button class="playGame" data-game="diceGame">🎲 Dice Roll</button></li>
+    <li><button class="playGame" data-game="mathGame">💡 Quick Math</button></li>
+    <li><button class="playGame" data-game="rpsGame">✂️ Rock-Paper-Scissors</button></li>
+    <li><button class="playGame" data-game="cardGame">🃏 Card Flip</button></li>
+    <li><button class="playGame" data-game="slotGame">🎰 Slot Machine</button></li>
+    <li><button class="playGame" data-game="memoryGame">🧩 Memory Match</button></li>
+    <li><button class="playGame" data-game="clickGame">🕹️ Click Speed Test</button></li>
+
+  </ul>
+</div>
+
+    <div id="shop" class="hidden">
+      <h3>Shop</h3>
+      <button class="buy" data-type="food" data-value="30" data-cost="5">Big Bread (+30 Hunger, 5💰)</button>
+      <button class="buy" data-type="toy" data-value="20" data-cost="7">Toy (+20 Happiness, 7💰)</button>
+    </div>
+
+    <div id="talkBox"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

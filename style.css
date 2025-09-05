@@ -1,0 +1,362 @@
+body {
+  font-family: "Comic Sans MS", sans-serif;
+  text-align: center;
+  background: linear-gradient(to bottom, #e0f7ff, #cce0ff);
+  color: #222;
+  margin: 0;
+  padding: 0;
+  transition: background 0.3s, color 0.3s;
+  overflow-x: hidden;
+  background-attachment: fixed; /* makes it cover whole page */
+}
+
+.dark {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.container {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+}
+
+#fumo {
+  position: absolute;
+  top: 180px;
+  left: 70%;
+  transform: none;
+  cursor: grab;
+  z-index: 1000;
+  transition: top 0.8s ease, left 0.8s ease; /* smooth movement */
+}
+
+#fumo.dragging {
+  cursor: grabbing;
+  transition: none; /* no lag while dragging */
+}
+
+
+#fumo img {
+  width: 200px;
+  transition: transform 0;
+  filter: drop-shadow(0px 10px 15px rgba(0, 0, 0, 0.3));
+}
+
+#fumo img.happy {
+  transform: rotate(-2deg);
+}
+
+#petHand {
+  position: absolute;
+  top: 0px; /* moved to top */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  display: none;
+  pointer-events: none;
+}
+
+.stats {
+  margin: 20px 0;
+}
+
+.bar {
+  background: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 20px;
+  margin: 10px 0;
+  position: relative;
+}
+
+.bar span {
+  position: absolute;
+  left: 10px;
+  top: 2px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.fill {
+  height: 100%;
+  background: #4cafef;
+  width: 100%;
+  transition: width 0.5s;
+}
+
+#coins {
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+button {
+  margin: 5px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  background: #4cafef;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button:hover {
+  background: #3a8fd8;
+}
+
+#shop {
+  margin-top: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+#talkBox {
+  margin-top: 15px;
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+  min-height: 100px;
+  max-height: 200px;   /* scroll limit */
+  font-style: italic;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  overflow-y: auto;    /* scrollable */
+}
+.dark #talkBox {
+  background: #222;
+  color: #fff;
+}
+
+/* ⚙️ Settings */
+.settings-btn {
+  font-size: 16px;
+  margin-left: 10px;
+  background: #4cafef;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+.settings-btn:hover {
+  background: #3a8fd8;
+}
+
+#settingsPanel {
+  margin: 10px auto;
+  padding: 10px;
+  width: fit-content;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  background: #fff;
+  text-align: left;
+  font-size: 14px;
+}
+.dark #settingsPanel {
+  background: #333;
+  color: #fff;
+  border-color: #555;
+}
+#fumosBtn {
+  margin: 5px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #87cefa;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+#fumosBtn:hover {
+  background: #66b5e0;
+}
+/* backgrounds */
+body.snow { background: linear-gradient(#dff4ff, #cce6ff); }
+body.shrine { background: #ffe4e1 url("https://i.imgur.com/yYQdArj.png") no-repeat center/cover; }
+body.library { background: #f5f5dc url("https://i.imgur.com/WFbOQxG.png") no-repeat center/cover; }
+
+/* animations */
+@keyframes floatUp {
+  0% { opacity: 1;}
+  100% { opacity: 0;}
+}
+
+
+/* Default Theme (light blue) */
+body.theme-default {
+  background: linear-gradient(to bottom, #dff4ff, #cce6ff);
+  color: #000;
+   margin: 0;
+  padding: 0;
+  transition: background 0.3s, color 0.3s;
+  overflow-x: hidden;
+  background-attachment: fixed; /* makes it cover whole page */
+}
+
+/* Dark Theme */
+body.theme-dark {
+  background: #1c1c1c;
+  color: #000000;
+   margin: 0;
+  padding: 0;
+  transition: background 0.3s, color 0.3s;
+  overflow-x: hidden;
+  background-attachment: fixed; /* makes it cover whole page */
+}
+
+/* Shrine Red */
+body.theme-red {
+  background: linear-gradient(to bottom, #ff6262, #ff0000);
+  color: #300;
+   margin: 0;
+  padding: 0;
+  transition: background 0.3s, color 0.3s;
+  overflow-x: hidden;
+  background-attachment: fixed; /* makes it cover whole page */
+}
+
+/* Magic Purple */
+body.theme-purple {
+  background: linear-gradient(to bottom, #9544ff, #240063);
+  color: #210030;
+   margin: 0;
+  padding: 0;
+  transition: background 0.3s, color 0.3s;
+  overflow-x: hidden;
+  background-attachment: fixed; /* makes it cover whole page */
+}
+
+/* Frosty Cyan */
+body.theme-cyan {
+  background: linear-gradient(to bottom, #71eeff, #00ddff);
+  color: #003344;
+   margin: 0;
+  padding: 0;
+  transition: background 0.3s, color 0.3s;
+  overflow-x: hidden;
+  background-attachment: fixed; /* makes it cover whole page */
+}
+#ball {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ff6666, #aa0000);
+  position: absolute;
+  top: 150px;
+  left: 150px;
+  display: none;
+  cursor: grab;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  z-index: 9999;
+  transition: transform 0.1s;
+}
+#ball:active {
+  cursor: grabbing;
+  transform: scale(1.1);
+}
+
+#fumoImg.happy {
+  animation: bounce 0.5s infinite alternate;
+}
+@keyframes bounce {
+  from { transform: scale(1) translateY(0); }
+  to   { transform: scale(1.05) translateY(-5px); }
+}
+#fumoImg {
+  --base-scale: 1;
+  --offset-y: 0px;
+  transform: scale(var(--base-scale)) translateY(var(--offset-y));
+  transition: transform 0.1s ease;
+}
+
+/* Petting effect: only rotate, don’t change scale */
+#fumoImg.happy {
+  animation: petWiggle 0.3s infinite alternate;
+}
+
+@keyframes petWiggle {
+  from { transform: scale(var(--base-scale)) translateY(var(--offset-y)) rotate(-5deg); }
+  to   { transform: scale(var(--base-scale)) translateY(var(--offset-y)) rotate(5deg); }
+}
+.panel {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  width: 250px;
+  background: rgba(255,255,255,0.9);
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+.hidden {
+  display: none;
+}
+
+#soap {
+  width: 80px;
+  height: auto;
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  cursor: grab;
+  z-index: 10;
+  user-select: none;
+}
+#soap:active {
+  cursor: grabbing;
+}
+#soap {
+  position: absolute;
+  width: 64px;  /* or whatever size you like */
+  height: auto;
+  cursor: grab;
+  z-index: 9999; /* always on top of fumo */
+}
+#mood {
+  position: absolute;
+  font-size: 20px;
+  font-weight: bold;
+  pointer-events: none;
+  color: white;
+  text-shadow: 1px 1px 3px black;
+}
+
+#quest {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+#resetBtn {
+  background: crimson;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  margin: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+#resetBtn:hover {
+  background: darkred;
+}
+#Icon {
+  width: 50px;      /* size of icon */
+  height: 50px;
+  border-radius: 50%; /* make it round */
+  object-fit: cover;  /* crop instead of stretching */
+  position: absolute;
+  top: 10px;   /* adjust position */
+  left: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3); /* optional shadow */
+  cursor: pointer;
+}
